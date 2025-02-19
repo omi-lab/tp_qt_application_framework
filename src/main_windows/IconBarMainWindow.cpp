@@ -111,11 +111,10 @@ IconBarMainWindow::IconBarMainWindow(QWidget* parent):
   d->buttonLayout = new QVBoxLayout();
   d->leftLayout->addLayout(d->buttonLayout);
   d->buttonLayout->setContentsMargins(2,2,2,2);
-  d->buttonLayout->setSpacing(0);
-  d->leftLayout->addStretch();
   buttonWidget->setFixedWidth(74);
   buttonWidget->setStyleSheet("background-color:#404142;");
   d->hLayout->addWidget(buttonWidget);
+  d->buttonLayout->addStretch();
 
   d->viewMenu = new QMenu("View");
   d->menuBar->addMenu(d->viewMenu);
@@ -136,17 +135,15 @@ void IconBarMainWindow::addWorkspace(AbstractWorkspace* workspace)
     auto button = new QToolButton();
     button->setCheckable(true);
     button->setChecked(a->isChecked());
-#ifdef ALEX_BLINOV_DEBUG // buttons too big for laptop screen - vertical dimension goes behind the screen edge!
-    button->setFixedSize(48, 48);
-    button->setIconSize(QSize(48, 48));
-#else
-    button->setFixedSize(70, 70);
-    button->setIconSize(QSize(64, 64));
-#endif
-
+    button->setIconSize(QSize(32, 32));
+    button->setMinimumSize(70, 32);
+    button->setMaximumSize(70, 100);
+    button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Policy::MinimumExpanding);
+    button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     button->setIcon(a->icon());
     button->setText(a->text());
     button->setToolTip(a->toolTip());
+    button->setStyleSheet("QToolButton {color: #c9c9c9; font-weight:bold;} QToolButton:checked {color: #1afc7e;}");
     d->buttonLayout->addWidget(button);
     connect(button, &QAbstractButton::clicked, a, &QAction::trigger);
     connect(a, &QAction::changed, button, [=]{button->setChecked(a->isChecked());});

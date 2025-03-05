@@ -102,12 +102,12 @@ struct CollapsibleStack::Private
       button->setStyleSheet(toolBarStyle());
       button->setIcon(configureIcon);
       collapsibleStack->addWidgetToButton(index, button);
-      connect(button, &QToolButton::clicked, q, [=]
+      connect(button, &QToolButton::clicked, q, [this, display]
       {
         execConfigDialog(display, q);
       });
 
-      new tp_qt_utils::QObjectCallback<void(bool)>(button, setButtonVisibility, [=](bool visible)
+      new tp_qt_utils::QObjectCallback<void(bool)>(button, setButtonVisibility, [button](bool visible)
       {
         button->setVisible(visible);
       });
@@ -118,12 +118,12 @@ struct CollapsibleStack::Private
       button->setStyleSheet(toolBarStyle());
       button->setIcon(closeIcon);
       collapsibleStack->addWidgetToButton(index, button);
-      connect(button, &QToolButton::clicked, q, [=]
+      connect(button, &QToolButton::clicked, q, [this, display]
       {
         collapsibleStack->removePage(displayIndex(display));
       });
 
-      new tp_qt_utils::QObjectCallback<void(bool)>(button, setButtonVisibility, [=](bool visible)
+      new tp_qt_utils::QObjectCallback<void(bool)>(button, setButtonVisibility, [button](bool visible)
       {
         button->setVisible(visible);
       });
